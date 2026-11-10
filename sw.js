@@ -1,0 +1,1 @@
+const CACHE_NAME = 'recetas-cristina-v3';

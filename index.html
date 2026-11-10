@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#b56b4a">
+<title>Las Recetas de Cristina</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Recetas de Cris">
+<style>
+  :root {
+    --primary: #b56b4a;
+    --primary-dark: #8f5238;
+    --primary-soft: #d9a88f;
+    --bg: #f8f5f0;
+    --card: #ffffff;
+    --text: #2e2a27;
+    --muted: #8c8279;
+    --line: #ece5dc;
+    --green: #6b8e6b;
+    --hero-bg: linear-gradient(135deg, #f5e6da 0%, #ecd5c2 100%);
+    --shadow: 0 1px 3px rgba(46,42,39,0.04), 0 8px 24px rgba(46,42,39,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --primary: #d99b7a;
+      --primary-dark: #b56b4a;
+      --primary-soft: #6b4a38;
+      --bg: #1a1816;
+      --card: #24211e;
+      --text: #ece5dc;
+      --muted: #9a9088;
+      --line: #35302b;
+      --green: #8fb08f;
+      --hero-bg: linear-gradient(135deg, #3a2e26 0%, #4a3a2e 100%);
+      --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.15);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    max-width: 520px; margin: 0 auto;
+    display: flex; flex-direction: column;
+    min-height: 100vh; padding-bottom: 76px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    letter-spacing: -0.1px;
+  }
+
+  /* WELCOME */
+  .welcome {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(160deg, #b56b4a 0%, #8f5238 100%);
+    color: white; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 32px; text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .welcome .w-emoji { font-size: 72px; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .welcome h1 { font-size: 30px; font-weight: 300; margin-bottom: 12px; line-height: 1.2; letter-spacing: -0.5px; }
+  .welcome h1 strong { font-weight: 700; }
+  .welcome p { font-size: 15px; opacity: 0.9; line-height: 1.6; margin-bottom: 36px; max-width: 300px; font-weight: 300; }
+  .welcome .w-btn {
+    background: white; color: var(--primary-dark);
+    border: none; padding: 16px 40px; border-radius: 32px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .welcome .w-btn:active { transform: scale(0.96); }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; padding: 22px 22px 20px;
+    position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 2px 20px rgba(143,82,56,0.15);
+  }
+  header .top { display: flex; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 19px; font-weight: 300; letter-spacing: -0.3px; }
+  header h1 strong { font-weight: 700; }
+  header .sub { font-size: 12px; opacity: 0.85; margin-top: 3px; font-style: italic; font-weight: 300; }
+  header .random-btn {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+    color: white; width: 42px; height: 42px; border-radius: 50%;
+    font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  header .random-btn:active { background: rgba(255,255,255,0.3); }
+
+  /* SEARCH */
+  .search-bar {
+    background: var(--card); padding: 14px 20px 12px;
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 96px; z-index: 9;
+  }
+  .search-wrap { position: relative; }
+  .search-wrap input {
+    width: 100%; padding: 12px 18px 12px 42px;
+    border: 1px solid var(--line); border-radius: 28px;
+    font-size: 14px; outline: none; background: var(--bg); color: var(--text);
+    transition: all 0.2s;
+    font-weight: 400;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus { border-color: var(--primary-soft); background: var(--card); }
+  .search-wrap::before {
+    content: '⌕'; position: absolute; left: 16px; top: 50%;
+    transform: translateY(-50%); font-size: 20px; color: var(--muted); pointer-events: none;
+    font-weight: 400;
+  }
+  .filters {
+    display: flex; gap: 8px; margin-top: 12px;
+    overflow-x: auto; padding-bottom: 2px; scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .chip {
+    background: transparent; border: 1px solid var(--line);
+    padding: 7px 16px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; color: var(--muted);
+    cursor: pointer; white-space: nowrap; transition: all 0.2s;
+    letter-spacing: 0.2px;
+  }
+  .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* LIST */
+  main { flex: 1; padding: 16px 0 24px; }
+  .stats-bar { padding: 4px 24px 10px; font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+  .card {
+    background: var(--card); margin: 12px 16px;
+    border-radius: 20px; padding: 14px;
+    box-shadow: var(--shadow);
+    display: flex; gap: 14px; align-items: center;
+    cursor: pointer; transition: transform 0.15s;
+    position: relative;
+  }
+  .card:active { transform: scale(0.985); }
+  .emoji {
+    width: 66px; height: 66px; border-radius: 16px;
+    background: var(--hero-bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; flex-shrink: 0; overflow: hidden;
+  }
+  .emoji img { width: 100%; height: 100%; object-fit: cover; }
+  .info { flex: 1; min-width: 0; }
+  .info h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); line-height: 1.3; letter-spacing: -0.2px; }
+  .meta-tags { display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--muted); font-weight: 500; }
+  .meta-tags span { background: var(--bg); padding: 3px 10px; border-radius: 12px; letter-spacing: 0.2px; }
+  .fav { font-size: 20px; cursor: pointer; padding: 6px; user-select: none; transition: transform 0.15s; }
+  .fav:active { transform: scale(1.25); }
+  .empty { text-align: center; padding: 80px 24px; color: var(--muted); font-size: 14px; font-weight: 300; }
+  .empty .big { font-size: 56px; margin-bottom: 16px; opacity: 0.5; }
+
+  .fab {
+    position: fixed; bottom: 96px; right: 22px;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary);
+    color: white; border: none; font-size: 26px; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(181,107,74,0.35);
+    z-index: 15; display: flex; align-items: center; justify-content: center;
+    font-weight: 300;
+  }
+  .fab:active { transform: scale(0.92); }
+
+  nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 520px;
+    background: var(--card); display: flex;
+    border-top: 1px solid var(--line);
+    z-index: 20; padding: 6px 0 8px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button {
+    flex: 1 0 auto; min-width: 58px; background: none; border: none;
+    padding: 6px 2px 4px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 9px; color: var(--muted); cursor: pointer;
+    font-weight: 500; transition: color 0.2s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  nav button .nav-icon { font-size: 18px; }
+  nav button.active { color: var(--primary); }
+
+  /* OVERLAY */
+  .overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    z-index: 100; overflow-y: auto;
+    display: none; flex-direction: column;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .overlay.show { display: flex; }
+  .overlay-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 2;
+  }
+  .overlay-header button {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+    color: white; width: 40px; height: 40px; border-radius: 50%;
+    font-size: 17px; cursor: pointer; flex-shrink: 0;
+  }
+  .overlay-header h2 { font-size: 16px; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.2px; }
+  .overlay-body { padding: 28px 24px 48px; }
+
+  /* DETAIL */
+  .detail-hero {
+    text-align: center;
+    background: var(--hero-bg);
+    width: 220px; height: 220px; margin: 0 auto 24px;
+    border-radius: 28px; display: flex; align-items: center; justify-content: center;
+    font-size: 110px; overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .detail-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-title { font-size: 24px; font-weight: 300; text-align: center; margin-bottom: 18px; letter-spacing: -0.4px; }
+  .detail-title strong { font-weight: 700; }
+  .detail-stats { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .detail-stats span {
+    background: var(--card); padding: 8px 16px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; color: var(--muted);
+    border: 1px solid var(--line);
+    letter-spacing: 0.2px;
+  }
+  .section-title {
+    font-size: 11px; text-transform: uppercase;
+    color: var(--primary); margin: 28px 0 14px;
+    letter-spacing: 1.5px; font-weight: 700;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .ingredients-list { list-style: none; }
+  .ingredients-list li {
+    padding: 12px 16px; border-bottom: 1px solid var(--line);
+    font-size: 14px; display: flex; align-items: center; gap: 12px;
+    background: var(--card); border-radius: 12px; margin-bottom: 6px;
+    font-weight: 400;
+  }
+  .ingredients-list li::before { content: '✓'; color: var(--green); font-weight: 600; font-size: 13px; }
+  .steps-list { padding-left: 0; list-style: none; counter-reset: step; }
+  .steps-list li {
+    counter-increment: step;
+    padding: 14px 0 14px 48px; position: relative;
+    font-size: 14px; line-height: 1.6;
+    border-bottom: 1px solid var(--line);
+    font-weight: 400;
+  }
+  .steps-list li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: transparent; color: var(--primary);
+    border: 1.5px solid var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .detail-actions { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+  .detail-actions button {
+    flex: 1 1 45%; padding: 15px; border: none; border-radius: 14px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    transition: transform 0.1s;
+  }
+  .detail-actions button:active { transform: scale(0.97); }
+  .btn-shopping { background: var(--green); color: white; }
+  .btn-fav { background: var(--card); color: var(--primary); border: 1.5px solid var(--primary) !important; }
+  .btn-share { background: var(--primary); color: white; }
+
+  /* FORM */
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block; font-size: 11px; font-weight: 700;
+    color: var(--muted); margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 13px 16px;
+    border: 1px solid var(--line); border-radius: 14px;
+    font-size: 14px; font-family: inherit;
+    outline: none; background: var(--card); color: var(--text);
+    font-weight: 400;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-soft); }
+  .form-group textarea { min-height: 96px; resize: vertical; }
+  .save-btn {
+    width: 100%; padding: 17px;
+    background: var(--primary);
+    color: white; border: none; border-radius: 14px;
+    font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 14px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .save-btn:active { transform: scale(0.98); }
+  .file-input {
+    width: 100%; padding: 14px;
+    border: 1.5px dashed var(--line); border-radius: 14px;
+    text-align: center; cursor: pointer; font-size: 13px; color: var(--muted);
+    background: var(--bg); font-weight: 500;
+  }
+  .preview-img { display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 14px; margin-top: 10px; }
+  .preview-img.show { display: block; }
+
+  /* SHOPPING */
+  .shopping-item {
+    background: var(--card); padding: 14px 16px;
+    border-radius: 12px; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 400;
+    border: 1px solid var(--line);
+  }
+  .shopping-item input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; }
+  .shopping-item.checked span { text-decoration: line-through; color: var(--muted); }
+  .clear-btn {
+    display: block; margin: 24px auto 0;
+    background: transparent; color: var(--primary);
+    border: 1.5px solid var(--primary);
+    padding: 12px 24px; border-radius: 24px;
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  /* WEEKLY MENU */
+  .dia-menu {
+    background: var(--card); border-radius: 18px;
+    margin-bottom: 14px; overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .dia-menu .dia-header {
+    background: transparent;
+    color: var(--primary); padding: 14px 18px 8px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .dia-menu .comidas { display: flex; padding: 0 12px 14px; gap: 10px; }
+  .comida-slot {
+    flex: 1; background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 10px;
+    cursor: pointer; text-align: center;
+    min-height: 82px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; position: relative;
+    transition: border-color 0.2s;
+  }
+  .comida-slot:active { border-color: var(--primary-soft); }
+  .comida-slot .slot-label {
+    font-size: 9px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .comida-slot .slot-emoji { font-size: 22px; }
+  .comida-slot .slot-nombre { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .comida-slot.vacio .slot-nombre { color: var(--muted); font-weight: 400; font-style: italic; }
+  .borrar-slot {
+    position: absolute; top: 5px; right: 5px;
+    background: var(--bg); color: var(--muted);
+    border: 1px solid var(--line); width: 20px; height: 20px;
+    border-radius: 50%; font-size: 11px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .menu-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+  .menu-actions button {
+    flex: 1; padding: 13px; border: none; border-radius: 14px;
+    font-size: 11px; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .btn-random-menu { background: var(--primary); color: white; }
+  .btn-export-menu { background: var(--card); color: var(--primary); border: 1.5px solid var(--primary); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 108px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: var(--bg);
+    padding: 13px 24px; border-radius: 26px;
+    font-size: 12px; font-weight: 500;
+    z-index: 200; opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; max-width: 80%; text-align: center;
+    letter-spacing: 0.2px;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="welcome" id="welcome" style="display:none;">
+  <div class="w-emoji">👩‍🍳</div>
+  <h1>Hola, <strong>Cristina</strong></h1>
+  <p>Este recetario está hecho especialmente para ti.<br>Con cariño, tus recetas favoritas y un montón de ideas nuevas.</p>
+  <button class="w-btn" onclick="cerrarBienvenida()">Empezar a cocinar</button>
+</div>
+
+<header>
+  <div class="top">
+    <div>
+      <h1>Las Recetas de <strong>Cristina</strong></h1>
+      <div class="sub">Hecho con cariño para Cris</div>
+    </div>
+    <button class="random-btn" id="randomBtn" title="Sorpréndeme">✦</button>
+  </div>
+</header>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <input type="text" id="buscador" placeholder="Buscar receta o ingrediente...">
+  </div>
+  <div class="filters" id="filters">
+    <div class="chip active" data-filter="all">Todas</div>
+    <div class="chip" data-filter="fácil">Fácil</div>
+    <div class="chip" data-filter="media">Media</div>
+    <div class="chip" data-filter="<15">≤15 min</div>
+    <div class="chip" data-filter="<30">≤30 min</div>
+  </div>
+</div>
+
+<main>
+  <div class="stats-bar" id="statsBar"></div>
+  <div id="listaRecetas"></div>
+</main>
+
+<button class="fab" id="addBtn" title="Añadir receta">+</button>
+
+<nav id="mainNav">
+  <button data-cat="desayuno" class="active"><span class="nav-icon">🥐</span>Desayunos</button>
+  <button data-cat="entrante"><span class="nav-icon">🥗</span>Entrantes</button>
+  <button data-cat="comida"><span class="nav-icon">🍲</span>Comidas</button>
+  <button data-cat="postre"><span class="nav-icon">🍰</span>Postres</button>
+  <button data-cat="bebida"><span class="nav-icon">🥤</span>Bebidas</button>
+  <button data-cat="menu"><span class="nav-icon">📅</span>Menú</button>
+</nav>
+
+<div class="overlay" id="overlayDetalle">
+  <div class="overlay-header">
+    <button id="cerrarDetalle">←</button>
+    <h2 id="detalleTitulo">Receta</h2>
+    <button id="favDetalle">🤍</button>
+  </div>
+  <div class="overlay-body" id="detalleBody"></div>
+</div>
+
+<div class="overlay" id="overlayForm">
+  <div class="overlay-header">
+    <button id="cerrarForm">←</button>
+    <h2>Nueva receta</h2>
+  </div>
+  <div class="overlay-body">
+    <div class="form-group"><label>Nombre *</label><input type="text" id="f_nombre" placeholder="Ej: Tortilla de patatas"></div>
+    <div class="form-group"><label>Categoría *</label>
+      <select id="f_categoria">
+        <option value="desayuno">Desayuno</option><option value="entrante">Entrante</option><option value="comida">Comida</option><option value="postre">Postre</option><option value="bebida">Bebida</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Emoji</label><input type="text" id="f_emoji" placeholder="🍳" maxlength="4"></div>
+    <div class="form-group"><label>Foto (opcional)</label>
+      <input type="file" id="f_foto" accept="image/*" class="file-input" style="display:none;" onchange="previsualizarFoto(event)">
+      <label for="f_foto" class="file-input" style="display:block;">📷 Toca para subir una foto</label>
+      <img id="previewFoto" class="preview-img">
+    </div>
+    <div class="form-group"><label>Tiempo (minutos)</label><input type="number" id="f_tiempo" placeholder="30" min="1"></div>
+    <div class="form-group"><label>Dificultad</label>
+      <select id="f_dificultad"><option>Fácil</option><option>Media</option><option>Difícil</option></select>
+    </div>
+    <div class="form-group"><label>Ingredientes (uno por línea) *</label><textarea id="f_ingredientes" placeholder="4 huevos&#10;500g patatas&#10;1 cebolla"></textarea></div>
+    <div class="form-group"><label>Pasos (uno por línea) *</label><textarea id="f_pasos" placeholder="Pelar y cortar patatas&#10;Freír&#10;Cuajar"></textarea></div>
+    <button class="save-btn" id="guardarReceta">Guardar receta</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlayShopping">
+  <div class="overlay-header">
+    <button id="cerrarShopping">←</button>
+    <h2>Lista de la compra</h2>
+  </div>
+  <div class="overlay-body" id="shoppingBody"></div>
+</div>
+
+<div class="overlay" id="overlayMenu">
+  <div class="overlay-header">
+    <button id="cerrarMenu">←</button>
+    <h2>Menú Semanal</h2>
+    <button id="generarListaSemana" style="background:rgba(255,255,255,0.15); width:auto; padding:0 16px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:0.5px;">LISTA</button>
+  </div>
+  <div class="overlay-body">
+    <div class="menu-actions">
+      <button class="btn-random-menu" onclick="menuAleatorio()">Menú aleatorio</button>
+      <button class="btn-export-menu" onclick="exportarMenu()">Exportar</button>
+    </div>
+    <div id="menuBody"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlaySelector">
+  <div class="overlay-header">
+    <button id="cerrarSelector">←</button>
+    <h2 id="selectorTitulo">Elegir receta</h2>
+  </div>
+  <div class="overlay-body">
+    <div class="search-wrap" style="margin-bottom:18px;">
+      <input type="text" id="buscadorSelector" placeholder="Buscar receta...">
+    </div>
+    <div id="listaSelector"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+if (!localStorage.getItem('bienvenidaVista')) {
+  document.getElementById('welcome').style.display = 'flex';
+}
+function cerrarBienvenida() {
+  document.getElementById('welcome').style.display = 'none';
+  localStorage.setItem('bienvenidaVista', '1');
+}
+
+// ============ RECETAS (sin categoría vegano, reubicadas) ============
+const RECETAS_DEFECTO = [
+  // DESAYUNOS
+  { id:'d1', cat:'desayuno', emoji:'🥞', nombre:'Tortitas americanas', tiempo:20, dificultad:'Fácil', ingredientes:['200g harina','2 huevos','250ml leche','2 cdas azúcar','1 cdta levadura','Pizca de sal','Mantequilla','Sirope de arce'], pasos:['Mezclar harina, azúcar, levadura y sal','Añadir huevos y leche, batir','Calentar sartén con mantequilla','Verter masa y cocinar 2 min por lado','Servir con sirope'] },
+  { id:'d2', cat:'desayuno', emoji:'🍳', nombre:'Huevos revueltos cremosos', tiempo:10, dificultad:'Fácil', ingredientes:['3 huevos','1 cda mantequilla','Sal','Pimienta negra','Cebollino'], pasos:['Batir huevos con sal y pimienta','Fundir mantequilla a fuego bajo','Añadir huevos y remover','Retirar antes de cuajar','Espolvorear cebollino'] },
+  { id:'d3', cat:'desayuno', emoji:'🥑', nombre:'Tostada de aguacate', tiempo:5, dificultad:'Fácil', ingredientes:['2 rebanadas pan','1 aguacate','Limón','Sal','Aceite de oliva','Huevo (opcional)'], pasos:['Tostar pan','Machacar aguacate con limón y sal','Extender','Añadir aceite','Coronar con huevo poché'] },
+  { id:'d4', cat:'desayuno', emoji:'🥣', nombre:'Porridge de avena', tiempo:10, dificultad:'Fácil', ingredientes:['50g avena','250ml leche','1 cda miel','Canela','Frutos rojos','Nueces'], pasos:['Calentar leche','Añadir avena y cocinar 5 min','Añadir miel y canela','Servir en bol','Coronar con frutos rojos y nueces'] },
+  { id:'d5', cat:'desayuno', emoji:'🥐', nombre:'Croissant relleno de jamón y queso', tiempo:8, dificultad:'Fácil', ingredientes:['2 croissants','4 lonchas jamón','4 lonchas queso','Mantequilla'], pasos:['Precalentar horno 180°C','Abrir croissants','Rellenar con jamón y queso','Hornear 5 min','Servir caliente'] },
+  { id:'d6', cat:'desayuno', emoji:'🍌', nombre:'Batido de plátano y avena', tiempo:5, dificultad:'Fácil', ingredientes:['1 plátano','200ml leche','30g avena','1 cdta miel','Hielo'], pasos:['Pelar plátano','Batir todo','Servir frío'] },
+  { id:'d7', cat:'desayuno', emoji:'🥚', nombre:'Tortilla francesa', tiempo:5, dificultad:'Fácil', ingredientes:['2 huevos','Sal','Mantequilla','Cebollino'], pasos:['Batir huevos','Fundir mantequilla','Cuajar 1 min','Doblar','Servir con cebollino'] },
+  { id:'d8', cat:'desayuno', emoji:'🥤', nombre:'Smoothie verde', tiempo:5, dificultad:'Fácil', ingredientes:['Espinacas','1 plátano','1 manzana','200ml agua coco','Limón'], pasos:['Lavar espinacas','Trocear frutas','Batir todo','Servir'] },
+  { id:'d9', cat:'desayuno', emoji:'🧇', nombre:'Gofres caseros', tiempo:25, dificultad:'Media', ingredientes:['250g harina','2 huevos','300ml leche','100g mantequilla','2 cdtas levadura','1 cda azúcar','Sal'], pasos:['Mezclar secos','Añadir huevos, leche y mantequilla','Batir','Reposar 10 min','Cocer en gofrera'] },
+  { id:'d10', cat:'desayuno', emoji:'🍞', nombre:'Torrijas', tiempo:15, dificultad:'Fácil', ingredientes:['4 rebanadas pan','2 huevos','150ml leche','1 cda azúcar','Canela','Mantequilla','Miel'], pasos:['Batir huevos con leche y canela','Empapar pan','Dorar en sartén','Servir con miel'] },
+  { id:'d11', cat:'desayuno', emoji:'🍓', nombre:'Yogur con granola y frutos rojos', tiempo:5, dificultad:'Fácil', ingredientes:['1 yogur','40g granola','50g frutos rojos','1 cdta miel'], pasos:['Poner yogur en bol','Añadir granola','Añadir frutos rojos','Regar con miel'] },
+  { id:'d12', cat:'desayuno', emoji:'🥝', nombre:'Bol de frutas tropicales', tiempo:10, dificultad:'Fácil', ingredientes:['1 kiwi','1/2 mango','1/2 papaya','Zumo naranja','Menta'], pasos:['Pelar y trocear frutas','Mezclar en bol','Aliñar con zumo','Decorar con menta'] },
+  { id:'d13', cat:'desayuno', emoji:'🧀', nombre:'Tostada de queso fresco y tomate', tiempo:5, dificultad:'Fácil', ingredientes:['2 rebanadas pan','100g queso fresco','1 tomate','Orégano','Aceite'], pasos:['Tostar pan','Colocar queso y tomate','Añadir orégano y aceite'] },
+  { id:'d14', cat:'desayuno', emoji:'🍯', nombre:'Avena con miel y nueces', tiempo:8, dificultad:'Fácil', ingredientes:['50g avena','200ml leche','1 cda miel','30g nueces','Canela'], pasos:['Cocer avena con leche 5 min','Añadir miel y canela','Servir con nueces'] },
+  { id:'d15', cat:'desayuno', emoji:'🥚', nombre:'Huevos poché con aguacate', tiempo:12, dificultad:'Media', ingredientes:['2 huevos','1 aguacate','Vinagre','Sal','Pimienta','Pan tostado'], pasos:['Calentar agua con vinagre','Cocer huevos 3 min','Machacar aguacate sobre pan','Colocar huevo','Salpimentar'] },
+
+  // ENTRANTES (incluye las veganas reubicadas)
+  { id:'e1', cat:'entrante', emoji:'🥗', nombre:'Ensalada César', tiempo:15, dificultad:'Fácil', ingredientes:['Lechuga romana','Pollo','Pan para croutons','Parmesano','Salsa César','Anchoas','Aceite'], pasos:['Lavar lechuga','Hacer croutons','Cocinar pollo','Mezclar todo','Aliñar'] },
+  { id:'e2', cat:'entrante', emoji:'🍅', nombre:'Gazpacho andaluz', tiempo:15, dificultad:'Fácil', ingredientes:['1kg tomates','1 pepino','1 pimiento','1 ajo','50ml aceite','1 cda vinagre','Sal','Pan'], pasos:['Trocear verduras','Batir con aceite y vinagre','Añadir pan','Colar','Enfriar 2h'] },
+  { id:'e3', cat:'entrante', emoji:'🧀', nombre:'Croquetas de jamón', tiempo:45, dificultad:'Media', ingredientes:['500ml leche','50g mantequilla','50g harina','100g jamón','Nuez moscada','Huevo','Pan rallado','Aceite'], pasos:['Hacer bechamel','Añadir jamón','Enfriar 3h','Formar croquetas','Freír'] },
+  { id:'e4', cat:'entrante', emoji:'🫒', nombre:'Aceitunas aliñadas', tiempo:10, dificultad:'Fácil', ingredientes:['200g aceitunas','1 ajo','Piel naranja','Tomillo','Aceite','Vinagre'], pasos:['Escurrir aceitunas','Machacar ajo','Añadir piel naranja','Cubrir con aceite y vinagre','Macerar 24h'] },
+  { id:'e5', cat:'entrante', emoji:'🍤', nombre:'Gambas al ajillo', tiempo:12, dificultad:'Fácil', ingredientes:['300g gambas','4 ajos','1 guindilla','100ml aceite','Perejil','Sal'], pasos:['Laminar ajos','Calentar aceite','Saltear gambas 3 min','Añadir perejil','Servir'] },
+  { id:'e6', cat:'entrante', emoji:'🥔', nombre:'Patatas bravas', tiempo:30, dificultad:'Media', ingredientes:['4 patatas','Aceite','1 cda pimentón','1 cda harina','200ml caldo','1 ajo','Sal'], pasos:['Freír patatas','Escurrir','Sofreír ajo, harina y pimentón','Añadir caldo','Servir con salsa'] },
+  { id:'e7', cat:'entrante', emoji:'🥖', nombre:'Pan con tomate', tiempo:5, dificultad:'Fácil', ingredientes:['4 rebanadas pan','2 tomates','1 ajo','Aceite','Sal'], pasos:['Tostar pan','Frotar con ajo','Frotar con tomate','Añadir aceite y sal'] },
+  { id:'e8', cat:'entrante', emoji:'🧅', nombre:'Cebolla caramelizada', tiempo:40, dificultad:'Fácil', ingredientes:['4 cebollas','3 cdas azúcar','50ml vinagre','Aceite','Sal'], pasos:['Cortar cebolla','Pochar 20 min','Añadir azúcar y vinagre','Cocinar 15 min','Servir'] },
+  { id:'e9', cat:'entrante', emoji:'🥑', nombre:'Guacamole', tiempo:10, dificultad:'Fácil', ingredientes:['2 aguacates','1 tomate','1/2 cebolla','1 chile','Lima','Cilantro','Sal'], pasos:['Machacar aguacates','Picar verduras','Mezclar','Aliñar con lima','Servir con totopos'] },
+  { id:'e10', cat:'entrante', emoji:'🍄', nombre:'Champiñones al ajillo', tiempo:15, dificultad:'Fácil', ingredientes:['300g champiñones','3 ajos','Guindilla','Aceite','Perejil','Sal'], pasos:['Limpiar champiñones','Laminar ajos','Saltear todo','Añadir perejil','Servir'] },
+  { id:'e11', cat:'entrante', emoji:'🥒', nombre:'Tzatziki', tiempo:10, dificultad:'Fácil', ingredientes:['1 pepino','200g yogur griego','1 ajo','Aceite','Eneldo','Sal'], pasos:['Rallar pepino','Mezclar con yogur','Añadir ajo y eneldo','Aliñar con aceite'] },
+  { id:'e12', cat:'entrante', emoji:'🌽', nombre:'Guacamole con maíz', tiempo:10, dificultad:'Fácil', ingredientes:['2 aguacates','1/2 lata maíz','1 tomate','Cebolla','Lima','Cilantro'], pasos:['Machacar aguacates','Añadir maíz y tomate','Añadir cebolla y cilantro','Aliñar con lima'] },
+  { id:'e13', cat:'entrante', emoji:'🧅', nombre:'Aros de cebolla', tiempo:20, dificultad:'Fácil', ingredientes:['2 cebollas','100g harina','1 huevo','Pan rallado','Aceite','Sal'], pasos:['Cortar cebollas en aros','Pasar por harina, huevo y pan','Freír','Escurrir'] },
+  { id:'e14', cat:'entrante', emoji:'🌱', nombre:'Hummus casero', tiempo:10, dificultad:'Fácil', ingredientes:['400g garbanzos','2 cdas tahini','Limón','1 ajo','50ml aceite','Comino','Sal'], pasos:['Escurrir garbanzos','Triturar con tahini, limón, ajo y aceite','Añadir comino y sal','Ajustar textura','Servir con aceite'] },
+  { id:'e15', cat:'entrante', emoji:'🥗', nombre:'Ensalada de quinoa', tiempo:20, dificultad:'Fácil', ingredientes:['200g quinoa','1 pepino','1 tomate','1/2 cebolla morada','Aguacate','Limón','Aceite','Perejil'], pasos:['Cocer quinoa','Enfriar','Cortar verduras','Mezclar','Aliñar'] },
+  { id:'e16', cat:'entrante', emoji:'🥗', nombre:'Ensalada de garbanzos y aguacate', tiempo:10, dificultad:'Fácil', ingredientes:['400g garbanzos','1 aguacate','1 tomate','Cebolla morada','Limón','Cilantro','Aceite'], pasos:['Escurrir garbanzos','Cortar aguacate y tomate','Picar cebolla','Mezclar','Aliñar'] },
+  { id:'e17', cat:'entrante', emoji:'🥑', nombre:'Tostada vegana de aguacate', tiempo:5, dificultad:'Fácil', ingredientes:['2 rebanadas pan','1 aguacate','1 tomate','Sésamo','Aceite','Sal','Pimienta'], pasos:['Tostar pan','Machacar aguacate','Extender','Colocar tomate','Añadir sésamo y aceite'] },
+
+  // COMIDAS (incluye las veganas reubicadas)
+  { id:'c1', cat:'comida', emoji:'🍳', nombre:'Tortilla de patatas', tiempo:40, dificultad:'Media', ingredientes:['4 huevos','500g patatas','1 cebolla','Aceite','Sal'], pasos:['Cortar patatas y cebolla','Freír','Batir huevos','Mezclar y escurrir','Cuajar en sartén'] },
+  { id:'c2', cat:'comida', emoji:'🍝', nombre:'Pasta carbonara', tiempo:25, dificultad:'Media', ingredientes:['400g espaguetis','150g panceta','3 yemas','50g parmesano','Pimienta','Sal'], pasos:['Cocer pasta al dente','Dorar panceta','Mezclar yemas con parmesano','Mezclar todo fuera del fuego','Servir con pimienta'] },
+  { id:'c3', cat:'comida', emoji:'🥘', nombre:'Paella valenciana', tiempo:50, dificultad:'Difícil', ingredientes:['400g arroz bomba','1 pollo','1 conejo','200g judía verde','100g garrofón','2 tomates','Azafrán','Caldo','Aceite','Sal'], pasos:['Sofreír pollo y conejo','Añadir judías','Añadir tomate','Añadir agua y azafrán','Añadir arroz y cocinar 18 min','Reposar 5 min'] },
+  { id:'c4', cat:'comida', emoji:'🐟', nombre:'Salmón a la plancha', tiempo:15, dificultad:'Fácil', ingredientes:['2 lomos salmón','Limón','Eneldo','Aceite','Sal','Pimienta'], pasos:['Secar salmón','Salpimentar','Calentar plancha','Cocinar 4 min por lado','Servir con limón'] },
+  { id:'c5', cat:'comida', emoji:'🍲', nombre:'Lentejas estofadas', tiempo:60, dificultad:'Fácil', ingredientes:['300g lentejas','1 cebolla','2 zanahorias','1 pimiento','2 ajos','Laurel','Pimentón','Aceite','Sal'], pasos:['Sofreír verduras','Añadir pimentón','Añadir lentejas y laurel','Cubrir con agua','Cocinar 40 min'] },
+  { id:'c6', cat:'comida', emoji:'🌮', nombre:'Tacos de pollo', tiempo:25, dificultad:'Fácil', ingredientes:['500g pollo','8 tortillas','1 cebolla','Cilantro','2 limas','Comino','Pimentón','Sal'], pasos:['Cortar pollo en tiras','Sazonar','Saltear 8 min','Calentar tortillas','Montar tacos'] },
+  { id:'c7', cat:'comida', emoji:'🍔', nombre:'Hamburguesa casera', tiempo:20, dificultad:'Fácil', ingredientes:['500g carne picada','1 huevo','1 cebolla','Pan hamburguesa','Queso cheddar','Lechuga','Tomate','Sal','Pimienta'], pasos:['Mezclar carne con huevo','Formar hamburguesas','Cocinar a la plancha','Añadir queso','Montar'] },
+  { id:'c8', cat:'comida', emoji:'🍕', nombre:'Pizza margarita casera', tiempo:90, dificultad:'Media', ingredientes:['500g harina','300ml agua','10g levadura','Sal','Salsa tomate','Mozzarella','Albahaca','Aceite'], pasos:['Amasar','Levar 1h','Estirar masa','Cubrir con tomate y mozzarella','Hornear 12 min a 250°C','Añadir albahaca'] },
+  { id:'c9', cat:'comida', emoji:'🍗', nombre:'Pollo al horno con patatas', tiempo:70, dificultad:'Fácil', ingredientes:['1 pollo','4 patatas','1 limón','4 ajos','Romero','Tomillo','Aceite','Sal','Pimienta'], pasos:['Precalentar horno 200°C','Salpimentar pollo','Cortar patatas','Colocar todo con hierbas','Hornear 60 min'] },
+  { id:'c10', cat:'comida', emoji:'🍚', nombre:'Arroz con verduras', tiempo:30, dificultad:'Fácil', ingredientes:['300g arroz','1 calabacín','1 pimiento','1 cebolla','2 zanahorias','Azafrán','Caldo','Aceite','Sal'], pasos:['Sofreír verduras','Añadir arroz','Añadir caldo','Añadir azafrán','Cocinar 18 min'] },
+  { id:'c11', cat:'comida', emoji:'🥩', nombre:'Entrecot a la plancha', tiempo:12, dificultad:'Fácil', ingredientes:['2 entrecots','Sal','Pimienta','Aceite','Mantequilla','Tomillo'], pasos:['Sacar carne 20 min antes','Calentar plancha','Marcar 3 min por lado','Añadir mantequilla y tomillo','Reposar 5 min'] },
+  { id:'c12', cat:'comida', emoji:'🐙', nombre:'Pulpo a la gallega', tiempo:60, dificultad:'Media', ingredientes:['1 pulpo','4 patatas','Pimentón dulce','Pimentón picante','Aceite','Sal gruesa'], pasos:['Cocer pulpo 40 min','Cocer patatas','Cortar patatas','Cortar pulpo','Aliñar'] },
+  { id:'c13', cat:'comida', emoji:'🥟', nombre:'Empanadillas de atún', tiempo:40, dificultad:'Media', ingredientes:['Obleas','2 latas atún','1 tomate','1 cebolla','1 pimiento','Aceite','Sal'], pasos:['Sofreír cebolla y pimiento','Añadir tomate','Añadir atún','Rellenar obleas','Freír'] },
+  { id:'c14', cat:'comida', emoji:'🍜', nombre:'Ramen rápido', tiempo:25, dificultad:'Media', ingredientes:['200g fideos ramen','1l caldo pollo','2 huevos','2 cdas soja','Jengibre','2 ajos','Cebolleta','Setas'], pasos:['Calentar caldo con soja y jengibre','Cocer fideos','Saltear setas','Cocer huevos 6 min','Servir'] },
+  { id:'c15', cat:'comida', emoji:'🦐', nombre:'Arroz con gambas', tiempo:30, dificultad:'Media', ingredientes:['300g arroz','300g gambas','1 pimiento','1 cebolla','2 ajos','Azafrán','Caldo pescado','Aceite','Sal'], pasos:['Sofreír verduras','Añadir gambas','Añadir arroz y caldo','Añadir azafrán','Cocinar 18 min'] },
+  { id:'c16', cat:'comida', emoji:'🥦', nombre:'Brócoli al horno con ajo', tiempo:25, dificultad:'Fácil', ingredientes:['1 brócoli','4 ajos','Aceite','Sal','Pimienta','Limón'], pasos:['Cortar brócoli','Mezclar con ajos y aceite','Hornear 20 min a 200°C','Exprimir limón'] },
+  { id:'c17', cat:'comida', emoji:'🍗', nombre:'Alitas de pollo al ajillo', tiempo:40, dificultad:'Fácil', ingredientes:['1kg alitas','6 ajos','1 vaso vino blanco','Aceite','Perejil','Sal'], pasos:['Dorar alitas','Añadir ajos','Añadir vino y cocinar 20 min','Espolvorear perejil'] },
+  { id:'c18', cat:'comida', emoji:'🐟', nombre:'Merluza en salsa verde', tiempo:25, dificultad:'Media', ingredientes:['4 lomos merluza','200ml caldo','2 ajos','Perejil','1 cda harina','Aceite','Sal'], pasos:['Sofreír ajos','Añadir harina y caldo','Añadir perejil','Colocar merluza','Cocinar 8 min'] },
+  { id:'c19', cat:'comida', emoji:'🥘', nombre:'Fabada asturiana', tiempo:90, dificultad:'Media', ingredientes:['500g fabes','200g chorizo','200g morcilla','200g panceta','Azafrán','Cebolla','Ajo','Aceite'], pasos:['Remojar fabes','Cocer con cebolla','Añadir embutidos','Cocinar 1h','Añadir azafrán'] },
+  { id:'c20', cat:'comida', emoji:'🍛', nombre:'Pollo al curry con arroz', tiempo:35, dificultad:'Fácil', ingredientes:['500g pollo','1 cebolla','2 ajos','1 cda curry','200ml leche coco','Arroz basmati','Aceite','Sal'], pasos:['Sofreír cebolla y ajo','Añadir pollo','Añadir curry y leche coco','Cocinar 20 min','Servir con arroz'] },
+  { id:'c21', cat:'comida', emoji:'🌯', nombre:'Fajitas de pollo', tiempo:25, dificultad:'Fácil', ingredientes:['500g pollo','1 pimiento','1 cebolla','Tortillas','Comino','Pimentón','Aceite','Sal'], pasos:['Cortar pollo','Saltear con pimiento y cebolla','Añadir especias','Calentar tortillas','Montar'] },
+  { id:'c22', cat:'comida', emoji:'🍲', nombre:'Cocido madrileño', tiempo:120, dificultad:'Difícil', ingredientes:['500g garbanzos','300g morcillo','1 chorizo','1 morcilla','1 patata','2 zanahorias','Repollo','Fideos','Azafrán'], pasos:['Remojar garbanzos','Cocer carnes 1h','Añadir garbanzos y verduras','Cocinar 1h más','Servir sopa de fideos'] },
+  { id:'c23', cat:'comida', emoji:'🍛', nombre:'Curry de garbanzos', tiempo:30, dificultad:'Fácil', ingredientes:['400g garbanzos','400ml leche coco','1 cebolla','2 ajos','1 cda curry','1 cdta cúrcuma','Tomate','Arroz basmati'], pasos:['Sofreír cebolla y ajo','Añadir especias','Añadir tomate y leche coco','Añadir garbanzos','Cocinar 15 min'] },
+  { id:'c24', cat:'comida', emoji:'🍲', nombre:'Lentejas veganas', tiempo:50, dificultad:'Fácil', ingredientes:['300g lentejas','1 cebolla','2 zanahorias','1 pimiento','2 tomates','2 ajos','Laurel','Pimentón','Aceite'], pasos:['Sofreír verduras','Añadir tomate y pimentón','Añadir lentejas','Cubrir con agua','Cocinar 40 min'] },
+  { id:'c25', cat:'comida', emoji:'🍜', nombre:'Fideos de arroz con verduras', tiempo:20, dificultad:'Fácil', ingredientes:['200g fideos arroz','1 zanahoria','1 calabacín','1 pimiento','Salsa soja','Aceite sésamo','Jengibre'], pasos:['Cocer fideos','Saltear verduras','Añadir jengibre','Añadir fideos','Aliñar'] },
+  { id:'c26', cat:'comida', emoji:'🌮', nombre:'Tacos veganos de lentejas', tiempo:25, dificultad:'Fácil', ingredientes:['200g lentejas','8 tortillas','1 cebolla','1 pimiento','Comino','Pimentón','Aguacate','Cilantro'], pasos:['Sofreír cebolla y pimiento','Añadir lentejas y especias','Cocinar 8 min','Calentar tortillas','Montar'] },
+  { id:'c27', cat:'comida', emoji:'🥦', nombre:'Wok de verduras y tofu', tiempo:20, dificultad:'Fácil', ingredientes:['200g tofu','1 brócoli','1 zanahoria','1 pimiento','Salsa soja','Aceite sésamo','Jengibre'], pasos:['Dorar tofu','Saltear verduras','Añadir tofu','Aliñar'] },
+  { id:'c28', cat:'comida', emoji:'🍲', nombre:'Sopa de miso', tiempo:10, dificultad:'Fácil', ingredientes:['2 cdas miso','1l agua','100g tofu','2 cebolletas','Alga wakame'], pasos:['Calentar agua','Disolver miso','Añadir tofu','Añadir cebolleta y wakame'] },
+  { id:'c29', cat:'comida', emoji:'🌮', nombre:'Tacos de coliflor asada', tiempo:25, dificultad:'Fácil', ingredientes:['1 coliflor','8 tortillas','Pimentón','Comino','Aceite','Aguacate','Lima'], pasos:['Cortar coliflor','Mezclar con especias','Hornear 20 min','Calentar tortillas','Montar'] },
+
+  // POSTRES (incluye bizcocho vegano reubicado)
+  { id:'p1', cat:'postre', emoji:'🍰', nombre:'Tarta de queso', tiempo:60, dificultad:'Media', ingredientes:['600g queso crema','200ml nata','4 huevos','150g azúcar','1 cda harina','200g galletas','80g mantequilla'], pasos:['Triturar galletas con mantequilla','Forrar molde','Batir queso con azúcar','Añadir huevos','Añadir nata y harina','Hornear 45 min a 180°C','Enfriar 4h'] },
+  { id:'p2', cat:'postre', emoji:'🍫', nombre:'Brownie de chocolate', tiempo:35, dificultad:'Fácil', ingredientes:['200g chocolate negro','150g mantequilla','3 huevos','150g azúcar','100g harina','100g nueces'], pasos:['Fundir chocolate con mantequilla','Batir huevos con azúcar','Mezclar','Añadir harina y nueces','Hornear 25 min a 180°C'] },
+  { id:'p3', cat:'postre', emoji:'🍮', nombre:'Flan de huevo', tiempo:50, dificultad:'Fácil', ingredientes:['4 huevos','500ml leche','150g azúcar','Caramelo','Vainilla'], pasos:['Caramelizar molde','Batir huevos con azúcar','Añadir leche y vainilla','Verter','Baño María 40 min'] },
+  { id:'p4', cat:'postre', emoji:'🍪', nombre:'Galletas de mantequilla', tiempo:45, dificultad:'Fácil', ingredientes:['250g harina','150g mantequilla','100g azúcar','1 huevo','1 cdta vainilla','Sal'], pasos:['Batir mantequilla con azúcar','Añadir huevo y vainilla','Incorporar harina','Formar bolas','Hornear 12 min a 180°C'] },
+  { id:'p5', cat:'postre', emoji:'🍎', nombre:'Tarta de manzana', tiempo:75, dificultad:'Media', ingredientes:['4 manzanas','1 lámina pasta quebrada','100g azúcar','2 huevos','200ml nata','Canela'], pasos:['Forrar molde','Cortar manzanas','Batir huevos, azúcar, nata y canela','Verter','Hornear 45 min a 180°C'] },
+  { id:'p6', cat:'postre', emoji:'🍩', nombre:'Donuts caseros', tiempo:60, dificultad:'Media', ingredientes:['500g harina','200ml leche','10g levadura','1 huevo','80g azúcar','50g mantequilla','Glaseado'], pasos:['Amasar','Levar 1h','Formar donuts','Freír','Glasear'] },
+  { id:'p7', cat:'postre', emoji:'🥧', nombre:'Tarta de Santiago', tiempo:50, dificultad:'Media', ingredientes:['250g almendra molida','200g azúcar','4 huevos','Piel limón','Canela','Azúcar glas'], pasos:['Mezclar almendra con azúcar','Añadir huevos','Añadir limón y canela','Hornear 35 min a 180°C','Decorar con azúcar glas'] },
+  { id:'p8', cat:'postre', emoji:'🍦', nombre:'Helado de vainilla casero', tiempo:20, dificultad:'Fácil', ingredientes:['500ml nata','400ml leche condensada','1 cdta vainilla'], pasos:['Montar nata','Añadir leche condensada','Añadir vainilla','Congelar 4h'] },
+  { id:'p9', cat:'postre', emoji:'🍓', nombre:'Fresas con nata', tiempo:5, dificultad:'Fácil', ingredientes:['500g fresas','300ml nata','3 cdas azúcar glas'], pasos:['Lavar fresas','Montar nata','Servir'] },
+  { id:'p10', cat:'postre', emoji:'🎂', nombre:'Bizcocho de yogur', tiempo:45, dificultad:'Fácil', ingredientes:['1 yogur','3 huevos','2 medidas azúcar','3 medidas harina','1 medida aceite','1 sobre levadura','Ralladura limón'], pasos:['Batir huevos con azúcar','Añadir yogur y aceite','Añadir harina','Añadir ralladura','Hornear 35 min a 180°C'] },
+  { id:'p11', cat:'postre', emoji:'🍮', nombre:'Arroz con leche', tiempo:40, dificultad:'Fácil', ingredientes:['100g arroz','1l leche','150g azúcar','Canela','Piel limón'], pasos:['Cocer arroz con leche 35 min','Añadir azúcar y canela','Añadir piel limón','Enfriar'] },
+  { id:'p12', cat:'postre', emoji:'🍫', nombre:'Mousse de chocolate', tiempo:20, dificultad:'Media', ingredientes:['200g chocolate negro','4 huevos','50g azúcar','200ml nata'], pasos:['Fundir chocolate','Separar yemas y claras','Mezclar yemas con chocolate','Montar nata y claras','Incorporar','Enfriar 3h'] },
+  { id:'p13', cat:'postre', emoji:'🍋', nombre:'Tarta de limón', tiempo:50, dificultad:'Media', ingredientes:['1 lámina pasta quebrada','4 huevos','150g azúcar','Zumo 3 limones','Piel rallada','100ml nata'], pasos:['Forrar molde','Batir huevos con azúcar y limón','Añadir nata','Verter','Hornear 35 min a 180°C'] },
+  { id:'p14', cat:'postre', emoji:'🍓', nombre:'Panna cotta de fresa', tiempo:20, dificultad:'Media', ingredientes:['400ml nata','100ml leche','80g azúcar','4 hojas gelatina','200g fresas','2 cdas azúcar'], pasos:['Calentar nata con azúcar','Añadir gelatina','Verter en moldes','Enfriar 4h','Triturar fresas y cubrir'] },
+  { id:'p15', cat:'postre', emoji:'🥥', nombre:'Bolitas de coco', tiempo:15, dificultad:'Fácil', ingredientes:['200g coco rallado','200ml leche condensada','1 cdta vainilla'], pasos:['Mezclar coco con leche','Añadir vainilla','Formar bolitas','Pasar por coco','Enfriar 1h'] },
+  { id:'p16', cat:'postre', emoji:'🍌', nombre:'Bizcocho vegano de plátano', tiempo:45, dificultad:'Fácil', ingredientes:['3 plátanos','200g harina','80g azúcar','80ml aceite','1 cdta levadura','1 cdta canela','Nueces'], pasos:['Machacar plátanos','Añadir azúcar, aceite y canela','Incorporar harina y levadura','Añadir nueces','Hornear 40 min a 180°C'] },
+
+  // BEBIDAS
+  { id:'b1', cat:'bebida', emoji:'🍹', nombre:'Sangría', tiempo:10, dificultad:'Fácil', ingredientes:['1 botella vino tinto','1 limón','1 naranja','1 melocotón','2 cdas azúcar','1 vaso refresco limón','Canela'], pasos:['Cortar frutas','Mezclar con vino y azúcar','Añadir refresco','Añadir canela','Macerar 2h'] },
+  { id:'b2', cat:'bebida', emoji:'🍸', nombre:'Mojito sin alcohol', tiempo:5, dificultad:'Fácil', ingredientes:['1 lima','8 hojas menta','2 cdtas azúcar','Agua con gas','Hielo'], pasos:['Machacar lima con azúcar','Añadir menta','Llenar con hielo','Añadir agua con gas','Remover'] },
+  { id:'b3', cat:'bebida', emoji:'🥤', nombre:'Limonada casera', tiempo:10, dificultad:'Fácil', ingredientes:['4 limones','1l agua','4 cdas azúcar','Hielo','Menta'], pasos:['Exprimir limones','Mezclar con agua y azúcar','Añadir hielo y menta','Servir frío'] },
+  { id:'b4', cat:'bebida', emoji:'☕', nombre:'Café con leche perfecto', tiempo:5, dificultad:'Fácil', ingredientes:['1 café expreso','150ml leche','Azúcar (opcional)'], pasos:['Preparar café','Calentar leche','Verter sobre café','Añadir azúcar'] },
+  { id:'b5', cat:'bebida', emoji:'🍵', nombre:'Té chai casero', tiempo:10, dificultad:'Fácil', ingredientes:['200ml leche','1 bolsa té negro','1 rama canela','2 clavos','2 cardamomo','Jengibre','Miel'], pasos:['Calentar leche con especias','Añadir té','Infusionar 3 min','Colar','Endulzar'] },
+  { id:'b6', cat:'bebida', emoji:'🥤', nombre:'Batido de fresa', tiempo:5, dificultad:'Fácil', ingredientes:['250g fresas','200ml leche','1 yogur','2 cdas azúcar','Hielo'], pasos:['Lavar fresas','Batir todo','Servir frío'] },
+  { id:'b7', cat:'bebida', emoji:'🍷', nombre:'Vino caliente especiado', tiempo:15, dificultad:'Fácil', ingredientes:['750ml vino tinto','1 naranja','2 ramas canela','4 clavos','3 cdas azúcar','Estrella anís'], pasos:['Calentar vino','Añadir piel naranja','Añadir especias y azúcar','Cocinar 10 min','Servir caliente'] },
+  { id:'b8', cat:'bebida', emoji:'🍹', nombre:'Piña colada sin alcohol', tiempo:5, dificultad:'Fácil', ingredientes:['200ml zumo piña','100ml leche coco','Hielo','Rodaja piña'], pasos:['Batir zumo con leche coco','Añadir hielo','Servir con piña'] },
+  { id:'b9', cat:'bebida', emoji:'🍵', nombre:'Té verde con limón', tiempo:5, dificultad:'Fácil', ingredientes:['1 bolsa té verde','200ml agua','1 rodaja limón','Miel'], pasos:['Infusionar té','Añadir limón','Endulzar'] },
+  { id:'b10', cat:'bebida', emoji:'🥤', nombre:'Horchata casera', tiempo:15, dificultad:'Media', ingredientes:['200g chufa','1l agua','100g azúcar','Canela'], pasos:['Remojar chufas 12h','Triturar con agua','Colar','Añadir azúcar y canela','Enfriar'] },
+  { id:'b11', cat:'bebida', emoji:'🍷', nombre:'Sangría de cava', tiempo:10, dificultad:'Fácil', ingredientes:['1 botella cava','2 melocotones','1 naranja','2 cdas azúcar','Hielo'], pasos:['Cortar frutas','Mezclar con cava y azúcar','Añadir hielo','Reposar 30 min'] },
+];
+
+// ============ ESTADO ============
+let recetas = [];
+let categoria = 'desayuno';
+let busqueda = '';
+let filtroActivo = 'all';
+let favoritos = JSON.parse(localStorage.getItem('favoritos') || '[]');
+let listaCompra = JSON.parse(localStorage.getItem('listaCompra') || '[]');
+let fotoTemp = null;
+
+function cargarRecetas() {
+  const guardadas = JSON.parse(localStorage.getItem('recetasCustom') || '[]');
+  recetas = [...RECETAS_DEFECTO, ...guardadas];
+}
+cargarRecetas();
+
+const listaRecetasEl = document.getElementById('listaRecetas');
+const statsBar = document.getElementById('statsBar');
+const busqEl = document.getElementById('buscador');
+const overlayDetalle = document.getElementById('overlayDetalle');
+const overlayForm = document.getElementById('overlayForm');
+const overlayShopping = document.getElementById('overlayShopping');
+const overlayMenu = document.getElementById('overlayMenu');
+const overlaySelector = document.getElementById('overlaySelector');
+
+function render() {
+  let lista = recetas.filter(r => r.cat === categoria);
+  if (busqueda.trim()) {
+    const q = busqueda.toLowerCase();
+    lista = lista.filter(r => r.nombre.toLowerCase().includes(q) || r.ingredientes.some(i => i.toLowerCase().includes(q)));
+  }
+  if (filtroActivo === 'fácil') lista = lista.filter(r => r.dificultad === 'Fácil');
+  else if (filtroActivo === 'media') lista = lista.filter(r => r.dificultad === 'Media');
+  else if (filtroActivo === '<15') lista = lista.filter(r => r.tiempo && r.tiempo <= 15);
+  else if (filtroActivo === '<30') lista = lista.filter(r => r.tiempo && r.tiempo <= 30);
+
+  lista.sort((a, b) => {
+    const fa = favoritos.includes(a.id) ? 0 : 1;
+    const fb = favoritos.includes(b.id) ? 0 : 1;
+    return fa - fb;
+  });
+
+  statsBar.textContent = `${lista.length} receta${lista.length !== 1 ? 's' : ''}`;
+
+  if (lista.length === 0) {
+    listaRecetasEl.innerHTML = `<div class="empty"><div class="big">🍽️</div>No hay recetas que coincidan.<br>Prueba con otros filtros o añade una nueva.</div>`;
+    return;
+  }
+
+  listaRecetasEl.innerHTML = lista.map(r => `
+    <div class="card" data-id="${r.id}">
+      <div class="emoji">${r.foto ? `<img src="${r.foto}">` : (r.emoji || '🍽️')}</div>
+      <div class="info">
+        <h3>${r.nombre}</h3>
+        <div class="meta-tags">
+          <span>${r.tiempo || '?'} min</span>
+          <span>${r.dificultad || '—'}</span>
+        </div>
+      </div>
+      <div class="fav" data-fav="${r.id}">${favoritos.includes(r.id) ? '❤️' : '🤍'}</div>
+    </div>
+  `).join('');
+
+  listaRecetasEl.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.classList.contains('fav')) return;
+      abrirDetalle(card.dataset.id);
+    });
+  });
+  listaRecetasEl.querySelectorAll('.fav').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleFav(el.dataset.fav);
+    });
+  });
+}
+
+function toggleFav(id) {
+  if (favoritos.includes(id)) favoritos = favoritos.filter(f => f !== id);
+  else favoritos.push(id);
+  localStorage.setItem('favoritos', JSON.stringify(favoritos));
+  render();
+  const f = document.getElementById('favDetalle');
+  if (f && overlayDetalle.classList.contains('show')) f.textContent = favoritos.includes(id) ? '❤️' : '🤍';
+}
+
+function abrirDetalle(id) {
+  const r = recetas.find(x => x.id === id);
+  if (!r) return;
+
+  document.getElementById('detalleTitulo').textContent = r.nombre;
+  document.getElementById('favDetalle').textContent = favoritos.includes(id) ? '❤️' : '🤍';
+  document.getElementById('favDetalle').onclick = () => toggleFav(id);
+
+  document.getElementById('detalleBody').innerHTML = `
+    <div class="detail-hero">${r.foto ? `<img src="${r.foto}">` : (r.emoji || '🍽️')}</div>
+    <div class="detail-title">${r.nombre}</div>
+    <div class="detail-stats">
+      <span>${r.tiempo || '?'} min</span>
+      <span>${r.dificultad || '—'}</span>
+      <span>${r.ingredientes.length} ingr.</span>
+    </div>
+    <div class="section-title">Ingredientes</div>
+    <ul class="ingredients-list">${r.ingredientes.map(i => `<li>${i}</li>`).join('')}</ul>
+    <div class="section-title">Preparación</div>
+    <ol class="steps-list">${r.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
+    <div class="detail-actions">
+      <button class="btn-shopping" onclick="añadirALista('${id}')">Añadir a la lista</button>
+      <button class="btn-fav" onclick="toggleFav('${id}');this.textContent='${favoritos.includes(id) ? 'Guardada' : 'Guardar'}'">${favoritos.includes(id) ? 'Guardada' : 'Guardar'}</button>
+      <button class="btn-share" onclick="compartirReceta('${id}')">Compartir</button>
+    </div>
+  `;
+
+  overlayDetalle.classList.add('show');
+  overlayDetalle.scrollTop = 0;
+}
+
+function compartirReceta(id) {
+  const r = recetas.find(x => x.id === id);
+  if (!r) return;
+  const texto = `🍳 ${r.nombre}\n\n⏱️ ${r.tiempo || '?'} min | ${r.dificultad || '—'}\n\nIngredientes:\n${r.ingredientes.map(i => '• ' + i).join('\n')}\n\nPreparación:\n${r.pasos.map((p, i) => (i+1) + '. ' + p).join('\n')}\n\n— Del recetario de Cristina`;
+
+  if (navigator.share) {
+    navigator.share({ title: r.nombre, text: texto }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(texto).then(() => mostrarToast('Receta copiada al portapapeles'));
+  }
+}
+
+function añadirALista(id) {
+  const r = recetas.find(x => x.id === id);
+  if (!r) return;
+  r.ingredientes.forEach(ing => {
+    if (!listaCompra.some(i => i.texto.toLowerCase() === ing.toLowerCase())) {
+      listaCompra.push({ texto: ing, checked: false });
+    }
+  });
+  localStorage.setItem('listaCompra', JSON.stringify(listaCompra));
+  mostrarToast('Añadidos ' + r.ingredientes.length + ' ingredientes');
+}
+
+function renderShopping() {
+  if (listaCompra.length === 0) {
+    document.getElementById('shoppingBody').innerHTML = `<div class="empty"><div class="big">🛒</div>Tu lista está vacía.<br>Abre una receta y pulsa "Añadir a la lista".</div>`;
+    return;
+  }
+  document.getElementById('shoppingBody').innerHTML = `
+    ${listaCompra.map((item, idx) => `
+      <label class="shopping-item ${item.checked ? 'checked' : ''}">
+        <input type="checkbox" ${item.checked ? 'checked' : ''} data-idx="${idx}">
+        <span>${item.texto}</span>
+      </label>
+    `).join('')}
+    <button class="clear-btn" onclick="vaciarLista()">Vaciar lista</button>
+  `;
+  document.querySelectorAll('#shoppingBody input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const idx = parseInt(e.target.dataset.idx);
+      listaCompra[idx].checked = e.target.checked;
+      localStorage.setItem('listaCompra', JSON.stringify(listaCompra));
+      renderShopping();
+    });
+  });
+}
+
+function vaciarLista() {
+  if (confirm('¿Vaciar la lista de la compra?')) {
+    listaCompra = [];
+    localStorage.setItem('listaCompra', JSON.stringify(listaCompra));
+    renderShopping();
+  }
+}
+
+function previsualizarFoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    fotoTemp = e.target.result;
+    const img = document.getElementById('previewFoto');
+    img.src = fotoTemp;
+    img.classList.add('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('addBtn').onclick = () => overlayForm.classList.add('show');
+document.getElementById('cerrarForm').onclick = () => overlayForm.classList.remove('show');
+
+document.getElementById('guardarReceta').onclick = () => {
+  const nombre = document.getElementById('f_nombre').value.trim();
+  const ingredientesRaw = document.getElementById('f_ingredientes').value.trim();
+  const pasosRaw = document.getElementById('f_pasos').value.trim();
+
+  if (!nombre || !ingredientesRaw || !pasosRaw) {
+    mostrarToast('Rellena nombre, ingredientes y pasos');
+    return;
+  }
+
+  const nueva = {
+    id: 'custom_' + Date.now(),
+    cat: document.getElementById('f_categoria').value,
+    emoji: document.getElementById('f_emoji').value.trim() || '🍽️',
+    nombre,
+    tiempo: parseInt(document.getElementById('f_tiempo').value) || null,
+    dificultad: document.getElementById('f_dificultad').value,
+    ingredientes: ingredientesRaw.split('\n').map(s => s.trim()).filter(Boolean),
+    pasos: pasosRaw.split('\n').map(s => s.trim()).filter(Boolean),
+    foto: fotoTemp
+  };
+
+  const guardadas = JSON.parse(localStorage.getItem('recetasCustom') || '[]');
+  guardadas.push(nueva);
+  localStorage.setItem('recetasCustom', JSON.stringify(guardadas));
+
+  cargarRecetas();
+  overlayForm.classList.remove('show');
+  categoria = nueva.cat;
+  document.querySelectorAll('#mainNav button').forEach(b => b.classList.toggle('active', b.dataset.cat === categoria));
+  render();
+  mostrarToast('Receta guardada');
+
+  ['f_nombre','f_emoji','f_tiempo','f_ingredientes','f_pasos'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('previewFoto').classList.remove('show');
+  fotoTemp = null;
+};
+
+document.querySelectorAll('#mainNav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (btn.dataset.cat === 'menu') {
+      renderMenu();
+      overlayMenu.classList.add('show');
+    } else {
+      categoria = btn.dataset.cat;
+      render();
+    }
+  });
+});
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    filtroActivo = chip.dataset.filter;
+    render();
+  });
+});
+
+busqEl.addEventListener('input', e => { busqueda = e.target.value; render(); });
+
+document.getElementById('randomBtn').onclick = () => {
+  const r = recetas[Math.floor(Math.random() * recetas.length)];
+  abrirDetalle(r.id);
+};
+
+document.getElementById('cerrarShopping').onclick = () => overlayShopping.classList.remove('show');
+document.getElementById('cerrarDetalle').onclick = () => overlayDetalle.classList.remove('show');
+
+const navEl = document.getElementById('mainNav');
+const carritoBtn = document.createElement('button');
+carritoBtn.innerHTML = '<span class="nav-icon">🛒</span>Lista';
+carritoBtn.addEventListener('click', () => { renderShopping(); overlayShopping.classList.add('show'); });
+navEl.appendChild(carritoBtn);
+
+const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+let menuSemanal = JSON.parse(localStorage.getItem('menuSemanal') || '{}');
+let slotEditando = null;
+
+function renderMenu() {
+  const body = document.getElementById('menuBody');
+  body.innerHTML = DIAS.map(dia => {
+    const comida = menuSemanal[dia]?.comida;
+    const cena = menuSemanal[dia]?.cena;
+    return `
+      <div class="dia-menu">
+        <div class="dia-header">${dia}</div>
+        <div class="comidas">
+          <div class="comida-slot ${comida ? '' : 'vacio'}" data-dia="${dia}" data-tipo="comida">
+            <span class="slot-label">Comida</span>
+            ${comida ? `<span class="slot-emoji">${comida.emoji || '🍽️'}</span><span class="slot-nombre">${comida.nombre}</span><button class="borrar-slot" data-borrar="${dia}-comida">×</button>` : `<span class="slot-nombre">+ Añadir</span>`}
+          </div>
+          <div class="comida-slot ${cena ? '' : 'vacio'}" data-dia="${dia}" data-tipo="cena">
+            <span class="slot-label">Cena</span>
+            ${cena ? `<span class="slot-emoji">${cena.emoji || '🍽️'}</span><span class="slot-nombre">${cena.nombre}</span><button class="borrar-slot" data-borrar="${dia}-cena">×</button>` : `<span class="slot-nombre">+ Añadir</span>`}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  body.querySelectorAll('.comida-slot').forEach(slot => {
+    slot.addEventListener('click', (e) => {
+      if (e.target.classList.contains('borrar-slot')) return;
+      slotEditando = { dia: slot.dataset.dia, tipo: slot.dataset.tipo };
+      document.getElementById('selectorTitulo').textContent = `${slot.dataset.dia} · ${slot.dataset.tipo}`;
+      document.getElementById('buscadorSelector').value = '';
+      renderSelector('');
+      overlaySelector.classList.add('show');
+    });
+  });
+  body.querySelectorAll('.borrar-slot').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const [dia, tipo] = btn.dataset.borrar.split('-');
+      if (menuSemanal[dia]) {
+        delete menuSemanal[dia][tipo];
+        if (Object.keys(menuSemanal[dia]).length === 0) delete menuSemanal[dia];
+      }
+      localStorage.setItem('menuSemanal', JSON.stringify(menuSemanal));
+      renderMenu();
+    });
+  });
+}
+
+function renderSelector(filtro) {
+  const cont = document.getElementById('listaSelector');
+  let lista = recetas;
+  if (filtro.trim()) {
+    const q = filtro.toLowerCase();
+    lista = lista.filter(r => r.nombre.toLowerCase().includes(q));
+  }
+  cont.innerHTML = lista.map(r => `
+    <div class="card" data-id="${r.id}" style="margin: 6px 0; padding: 10px;">
+      <div class="emoji" style="width:44px; height:44px; font-size:22px;">${r.foto ? `<img src="${r.foto}">` : (r.emoji || '🍽️')}</div>
+      <div class="info"><h3 style="font-size:14px;">${r.nombre}</h3><div class="meta-tags"><span>${r.cat}</span><span>${r.tiempo || '?'} min</span></div></div>
+    </div>
+  `).join('');
+  cont.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const r = recetas.find(x => x.id === card.dataset.id);
+      if (!slotEditando || !r) return;
+      if (!menuSemanal[slotEditando.dia]) menuSemanal[slotEditando.dia] = {};
+      menuSemanal[slotEditando.dia][slotEditando.tipo] = { id: r.id, nombre: r.nombre, emoji: r.emoji };
+      localStorage.setItem('menuSemanal', JSON.stringify(menuSemanal));
+      overlaySelector.classList.remove('show');
+      renderMenu();
+      mostrarToast('Asignada al ' + slotEditando.dia);
+    });
+  });
+}
+
+document.getElementById('buscadorSelector').addEventListener('input', e => renderSelector(e.target.value));
+document.getElementById('cerrarSelector').onclick = () => overlaySelector.classList.remove('show');
+document.getElementById('cerrarMenu').onclick = () => overlayMenu.classList.remove('show');
+
+document.getElementById('generarListaSemana').onclick = () => {
+  let añadidos = 0;
+  DIAS.forEach(dia => {
+    ['comida', 'cena'].forEach(tipo => {
+      const entrada = menuSemanal[dia]?.[tipo];
+      if (!entrada) return;
+      const rc = recetas.find(r => r.id === entrada.id);
+      if (!rc) return;
+      rc.ingredientes.forEach(ing => {
+        if (!listaCompra.some(i => i.texto.toLowerCase() === ing.toLowerCase())) {
+          listaCompra.push({ texto: ing, checked: false });
+          añadidos++;
+        }
+      });
+    });
+  });
+  localStorage.setItem('listaCompra', JSON.stringify(listaCompra));
+  mostrarToast(`${añadidos} ingredientes añadidos`);
+};
+
+function menuAleatorio() {
+  const comidas = recetas.filter(r => r.cat === 'comida' || r.cat === 'entrante');
+  const cenas = recetas.filter(r => r.cat === 'comida' || r.cat === 'entrante');
+  DIAS.forEach(dia => {
+    const c = comidas[Math.floor(Math.random() * comidas.length)];
+    const ce = cenas[Math.floor(Math.random() * cenas.length)];
+    menuSemanal[dia] = {
+      comida: { id: c.id, nombre: c.nombre, emoji: c.emoji },
+      cena: { id: ce.id, nombre: ce.nombre, emoji: ce.emoji }
+    };
+  });
+  localStorage.setItem('menuSemanal', JSON.stringify(menuSemanal));
+  renderMenu();
+  mostrarToast('Menú semanal generado');
+}
+
+function exportarMenu() {
+  let texto = 'Menú semanal de Cristina\n\n';
+  DIAS.forEach(dia => {
+    const c = menuSemanal[dia]?.comida;
+    const ce = menuSemanal[dia]?.cena;
+    texto += `— ${dia} —\n`;
+    texto += `Comida: ${c ? c.nombre : '(sin asignar)'}\n`;
+    texto += `Cena: ${ce ? ce.nombre : '(sin asignar)'}\n\n`;
+  });
+
+  if (navigator.share) {
+    navigator.share({ title: 'Menú semanal', text: texto }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(texto).then(() => mostrarToast('Menú copiado al portapapeles'));
+  }
+}
+
+let toastTimer;
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+render();
+</script>
+
+</body>
+</html>
